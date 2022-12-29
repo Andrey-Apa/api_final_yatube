@@ -39,14 +39,85 @@ pip install -r requirements.txt
 Выполнить миграции:
 ```bash
 cd yatube_api
-
+```
+```bash
 python manage.py migrate
 ```
 Запустить проект:
 ```bash
 python manage.py runserver
 ```
+Создайте суперпользователя:
+```bash
+python manage.py createsuperuser
+```
+Username (leave blank to use 'user'): # Придумайте логин (например, admin)
+Email address: # укажите почту
+Password: # придумайте пароль
+Password (again): # повторите пароль
 
+## Примеры запросов
+- GET api/v1/posts/
+Возвращает список всех постов.
+```
+[
+    {
+        "id": 1,
+        "text": "string",
+        "author": "string",
+        "image": "string",
+        "group": null,
+        "pub_date": "2022-12-28T10:19:42.404733Z"
+    },
+]
+```
+- POST api/v1/posts/
+Создаёт новый пост, в теле запроса можно передвать переменные "text": "string", "group": id, "image": "string"
+(Только для авторизированных пользователей).
+```
+{
+    "text": "string",
+    "group": id,
+    "image": "string"
+}
+```
+Возвращает созданный пост, в поле автора указывается имя пользователя, отправившего запрос, доавляется дата публикации.
+```
+{
+    "id": id,
+    "text": "string",
+    "author": "username",
+    "image": "string",
+    "group": id,
+    "pub_date": "2022-12-29T08:37:05.620339Z"
+}
+```
+- GET /api/v1/follow/
+Возвращает список всех подписок пользователя(Только для авторизированных пользователей).
+```
+[
+    {
+        "user": "username",
+        "following": "username"
+    }
+]
+```
+- POST /api/v1/follow/
+Создает новую подписку на выбранного автора, в теле запроса необходимо указать "following": "username"
+(Нельзя подписаться на автора дважды и на самого себя).
+```
+{
+  "following": "username"
+}
+```
+В случае удачной подписки возвращает юзернэйм подписчика и автора(на кого удалось подписаться).
+```
+{
+        "user": "username",
+        "following": "username"
+    }
+```
+Более подробную информацию можно найти в "Документации"
 ## Документация к API
 
 http://127.0.0.1:8000/redoc
